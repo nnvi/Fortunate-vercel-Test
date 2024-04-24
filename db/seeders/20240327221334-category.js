@@ -18,18 +18,18 @@ const names = [
 ]
 
 const images = [
-  "https://ibb.co/PwpbHJf",
-  "https://ibb.co/9NhCQmK",
-  "https://ibb.co/420GWVz",
-  "https://ibb.co/188x1JG",
-  "https://ibb.co/BLmsWCT",
-  "https://ibb.co/rfn7HYq",
-  "https://ibb.co/RY8LmSP",
-  "https://ibb.co/yNwdj9D",
-  "https://ibb.co/c2N6SDp",
-  "https://ibb.co/zJSXRbK",
-  "https://ibb.co/KhhmLx0",
-  "https://ibb.co/n0bDqdh"
+  "https://i.ibb.co/dG93YXz/Limited-Offer.jpg",
+  "https://ibb.co/9NhCQmKhttps://i.ibb.co/SPc9FDY/Fortunate-Bread.jpg",
+  "https://ibb.co/https://i.ibb.co/8bQpM7q/Asian-Cuisine.webp",
+  "https://ibb.co/https://i.ibb.co/nzzS98M/Spaghetti.jpg",
+  "https://ibb.co/https://i.ibb.co/dBSKC5k/Fortunate-Rice.jpg",
+  "https://ibb.co/https://i.ibb.co/Tqzvt6J/Fast-Food.png",
+  "https://ibb.co/https://i.ibb.co/KbnCkG7/Miscellaneous.jpg",
+  "https://ibb.co/https://i.ibb.co/YNzPsC6/Fortunate-Coffee.jpg",
+  "https://ibb.co/https://i.ibb.co/bNrsMzy/Fortunate-Tea.jpg",
+  "https://ibb.co/https://i.ibb.co/Kw92q7C/Fresh-Juice.webp",
+  "https://ibb.co/https://i.ibb.co/xLL3fqC/Fresh-Mocktail.jpg",
+  "https://ibb.co/https://i.ibb.co/3s7056t/Fortunate-Dessert.jpg"
 ]
 
 /** @type {import('sequelize-cli').Migration} */

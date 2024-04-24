@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     detail_order_qty: DataTypes.INTEGER,
+    detail_order_notes: DataTypes.STRING,
     created_at: {
       allowNull: false,
       type: DataTypes.DATE,
