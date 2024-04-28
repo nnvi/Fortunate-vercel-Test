@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'menu',
+    tableName: 'menu',
     timestamps: true, // Aktifkan timestamps
   });
   return menu;

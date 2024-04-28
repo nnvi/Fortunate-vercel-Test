@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'admin_acc',
-    timestamps: true,
+    tableName: 'admin_acc',
+    timestamps: false,
   });
   return admin_acc;
 };

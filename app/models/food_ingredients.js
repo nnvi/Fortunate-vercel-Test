@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'food_ingredients',
+    tableName: 'food_ingredients',
     timestamps: true
   });
   return food_ingredients;
