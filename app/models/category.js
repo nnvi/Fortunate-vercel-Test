@@ -14,19 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   category.init({
-    category_id: DataTypes.INTEGER,
+    category_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     category_name: DataTypes.STRING,
     category_image: DataTypes.STRING,
-    created_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW // Mengatur nilai default menjadi tanggal saat ini
-    },
-    updated_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW // Mengatur nilai default menjadi tanggal saat ini
-    }
   }, {
     sequelize,
     modelName: 'category',

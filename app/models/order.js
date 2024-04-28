@@ -19,16 +19,6 @@ module.exports = (sequelize, DataTypes) => {
     cust_name: DataTypes.STRING,
     table_number: DataTypes.INTEGER,
     order_status: DataTypes.BOOLEAN,
-    created_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW // Mengatur nilai default menjadi tanggal saat ini
-    },
-    updated_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW // Mengatur nilai default menjadi tanggal saat ini
-    },
     admin_acc_id: {
       allowNull: true,
       type: DataTypes.INTEGER

@@ -30,16 +30,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     detail_order_qty: DataTypes.INTEGER,
     detail_order_notes: DataTypes.STRING,
-    created_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW // Mengatur nilai default menjadi tanggal saat ini
-    },
-    updated_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW // Mengatur nilai default menjadi tanggal saat ini
-    }
   }, {
     sequelize,
     modelName: 'detail_order',

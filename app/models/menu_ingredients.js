@@ -31,16 +31,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     menu_ingredients_qty: DataTypes.INTEGER,
-    created_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW // Mengatur nilai default menjadi tanggal saat ini
-    },
-    updated_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW // Mengatur nilai default menjadi tanggal saat ini
-    },
   }, {
     sequelize,
     modelName: 'menu_ingredients',
