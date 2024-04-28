@@ -10,7 +10,9 @@ module.exports = (sequelize, DataTypes) => {
         });
 
         this.belongsToMany(models.food_ingredients, {
-            foreignKey: "food_ingredients_id"
+          through: 'MenuFoodIngredients', // Nama model perantara
+          foreignKey: 'menu_ingredients_id', // Kunci luar model menu_ingredients pada model perantara
+          otherKey: 'food_ingredients_id' // Kunci luar model food_ingredients pada model perantara
         });
     }
   }
@@ -42,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'menu_ingredients',
+    tableName: 'menu_ingredients',
     timestamps: true, 
   });
   return menu_ingredients;
