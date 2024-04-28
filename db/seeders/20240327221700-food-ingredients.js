@@ -64,8 +64,8 @@ module.exports = {
    const food_ingredients = names.map((name) => ({
     food_ingredients_name: name,
     food_ingredients_qty: 10,
-    created_at: timestamp,
-    updated_at: timestamp
+    createdAt: timestamp,
+    updatedAt: timestamp
 
    }))
    await queryInterface.bulkInsert('food_ingredients', food_ingredients, {});

@@ -48,8 +48,8 @@ module.exports = {
    const category = names.map((name, index) => ({
     category_name: name,
     category_image: images[index],
-    created_at: timestamp,
-    updated_at: timestamp
+    createdAt: timestamp,
+    updatedAt: timestamp
 
    }))
    await queryInterface.bulkInsert('category', category, {});

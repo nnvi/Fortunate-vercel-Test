@@ -18,11 +18,11 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: 'https://ibb.co/MS4GmQY'
       },
-      created_at: {
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
       }

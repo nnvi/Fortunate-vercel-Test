@@ -339,8 +339,8 @@ module.exports = {
           menu_price: menuItem.price,
           menu_image: menuItem.image,
           menu_desc: "Indonesian Food, we serve the best of combined rice and beancurd w/ blackpepper spices sauce and no MSG potato spices soup.",
-          created_at: timestamp,
-          updated_at: timestamp
+          createdAt: timestamp,
+          updatedAt: timestamp
         };
 
         // Tambahkan menu item ke dalam array menuItems

@@ -126,8 +126,8 @@ module.exports = {
           menu_id: menuId,
           food_ingredients_id: foodId[j],
           menu_ingredients_qty: qty[j],
-          created_at: timestamp,
-          updated_at: timestamp
+          createdAt: timestamp,
+          updatedAt: timestamp
         };
 
         menuIngredients.push(menuIngredient);

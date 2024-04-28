@@ -24,16 +24,6 @@ module.exports = (sequelize, DataTypes) => {
     menu_price: DataTypes.FLOAT,
     menu_image: DataTypes.STRING,
     menu_desc: DataTypes.STRING,
-    created_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW // Mengatur nilai default menjadi tanggal saat ini
-    },
-    updated_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW // Mengatur nilai default menjadi tanggal saat ini
-    }
   }, {
     sequelize,
     modelName: 'menu',
