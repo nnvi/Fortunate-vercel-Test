@@ -13,7 +13,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      food_ingredients_qty: {
+      food_ingredients_stock: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
