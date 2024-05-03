@@ -48,7 +48,8 @@ function apply(app) {
   app.post("/api/v1/new-food-ingredients", foodIngredientsController.handleCreateFoodIngredients);
   app.get("/api/v1/food-ingredients", foodIngredientsController.handleListFoodIngredients);
   app.get("/api/v1/food-ingredients/:id", foodIngredientsController.handleGetFoodIngredients);
-  app.get("/api/v1/food-ingredients-type/:type", foodIngredientsController.handleGetFoodIngredientsByType);
+  app.put("/api/v1/food-ingredients/:id", foodIngredientsController.handleUpdateFoodIngredients);
+  app.delete("/api/v1/food-ingredients/:id", foodIngredientsController.handleDeleteFoodIngredients);
 
   app.use(applicationController.handleNotFound);
   app.use(applicationController.handleError);

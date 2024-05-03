@@ -28,5 +28,5 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'detail_order',
     timestamps: true, 
   });
-  return detail_order;
+  return detail_food_ingredients;
 };
