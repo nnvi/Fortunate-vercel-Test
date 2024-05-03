@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true
     },
     food_ingredients_name: DataTypes.STRING,
-    food_ingredients_qty: DataTypes.INTEGER,
+    food_ingredients_stock: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'food_ingredients',

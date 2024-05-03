@@ -63,7 +63,7 @@ module.exports = {
    const timestamp = new Date();
    const food_ingredients = names.map((name) => ({
     food_ingredients_name: name,
-    food_ingredients_qty: 10,
+    food_ingredients_stock: 20,
     createdAt: timestamp,
     updatedAt: timestamp
 
