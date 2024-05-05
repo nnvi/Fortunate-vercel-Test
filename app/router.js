@@ -8,13 +8,15 @@ const {
    CategoryController,
    MenuController,
    FoodIngredientsController,
+   DetailFoodIngredientsController,
   } = require("./controllers");
 
 const { 
   admin_acc,
   category,
   menu,
-  food_ingredients
+  food_ingredients,
+  detail_food_ingredients,
 } = require("./models");
 
 function apply(app) {
@@ -22,12 +24,14 @@ function apply(app) {
   const categoryModel = category;
   const menuModel = menu;
   const foodIngredientsModel = food_ingredients;
+  const detailFoodIngredientsModel = detail_food_ingredients;
 
   const applicationController = new ApplicationController();
   const authenticationController = new AuthenticationController({ bcrypt, jwt, adminModel });
   const categoryController = new CategoryController({ categoryModel });
-  const menuController = new MenuController({ menuModel });
+  const menuController = new MenuController({ categoryModel, menuModel });
   const foodIngredientsController = new FoodIngredientsController({ foodIngredientsModel });
+  const detailFoodIngredientsController = new DetailFoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   
   app.get("/", applicationController.handleGetRoot);
 
@@ -50,6 +54,10 @@ function apply(app) {
   app.get("/api/v1/food-ingredients/:id", foodIngredientsController.handleGetFoodIngredients);
   app.put("/api/v1/food-ingredients/:id", foodIngredientsController.handleUpdateFoodIngredients);
   app.delete("/api/v1/food-ingredients/:id", foodIngredientsController.handleDeleteFoodIngredients);
+
+  app.post("/api/v1/type-food-ingredients", detailFoodIngredientsController.handleCreateDetailFoodIngredients);
+  app.get("/api/v1/type-food-ingredients", detailFoodIngredientsController.handleListDetailFoodIngredients);
+  app.get("/api/v1/type-food-ingredients/:id", detailFoodIngredientsController.handleGetDetailFoodIngredients);
 
   app.use(applicationController.handleNotFound);
   app.use(applicationController.handleError);
