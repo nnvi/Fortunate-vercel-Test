@@ -1,8 +1,10 @@
+const { where } = require('sequelize');
 const ApplicationController = require('./ApplicationController');
 
 class MenuController extends ApplicationController {
-  constructor({ menuModel }) {
+  constructor({ categoryModel, menuModel }) {
     super();
+    this.categoryModel = categoryModel;
     this.menuModel = menuModel;
   }
 
@@ -15,6 +17,14 @@ class MenuController extends ApplicationController {
         menu_image,
         menu_desc
       } = req.body;
+
+      const categoryId = await this.categoryModel.findOne({
+        where: { category_id: category_id }
+      });
+
+      if (!categoryId) {
+        return res.status(404).json({ error: { message: "Category not found." } });
+      }
 
       const menu = await this.menuModel.create({
         category_id,
@@ -50,6 +60,14 @@ class MenuController extends ApplicationController {
         menu_image,
         menu_desc
       } = req.body;
+
+      const categoryId = await this.categoryModel.findOne({
+        where: { category_id: category_id }
+      });
+
+      if (!categoryId) {
+        return res.status(404).json({ error: { message: "Category not found." } });
+      }
 
       const menu = await this.getMenuFromRequest(req);
 

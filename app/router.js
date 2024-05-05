@@ -29,7 +29,7 @@ function apply(app) {
   const applicationController = new ApplicationController();
   const authenticationController = new AuthenticationController({ bcrypt, jwt, adminModel });
   const categoryController = new CategoryController({ categoryModel });
-  const menuController = new MenuController({ menuModel });
+  const menuController = new MenuController({ categoryModel, menuModel });
   const foodIngredientsController = new FoodIngredientsController({ foodIngredientsModel });
   const detailFoodIngredientsController = new DetailFoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   
