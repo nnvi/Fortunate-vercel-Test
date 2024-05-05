@@ -21,11 +21,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     detail_food_ingredients_qty: DataTypes.INTEGER,
-    detail_food_ingredients_type: DataTypes.STRING,
+    detail_food_ingredients_type: DataTypes.ENUM('In', 'Out'),
   }, {
     sequelize,
-    modelName: 'detail_order',
-    tableName: 'detail_order',
+    modelName: 'detail_food_ingredients',
+    tableName: 'detail_food_ingredients',
     timestamps: true, 
   });
   return detail_food_ingredients;

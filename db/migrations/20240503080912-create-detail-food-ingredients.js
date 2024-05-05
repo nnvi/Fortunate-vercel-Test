@@ -25,7 +25,7 @@ module.exports = {
       },
       detail_food_ingredients_type: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.ENUM('In', 'Out')
       },
       createdAt: {
         allowNull: false,
@@ -38,6 +38,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('DetailFoodIngredients');
+    await queryInterface.dropTable('detail_food_ingredients');
   }
 };
