@@ -9,6 +9,7 @@ const {
    MenuController,
    FoodIngredientsController,
    DetailFoodIngredientsController,
+   MenuIngredientsController,
   } = require("./controllers");
 
 const { 
@@ -17,6 +18,7 @@ const {
   menu,
   food_ingredients,
   detail_food_ingredients,
+  menu_ingredients,
 } = require("./models");
 
 function apply(app) {
@@ -25,6 +27,7 @@ function apply(app) {
   const menuModel = menu;
   const foodIngredientsModel = food_ingredients;
   const detailFoodIngredientsModel = detail_food_ingredients;
+  const menuIngredientsModel = menu_ingredients;
 
   const applicationController = new ApplicationController();
   const authenticationController = new AuthenticationController({ bcrypt, jwt, adminModel });
@@ -32,6 +35,7 @@ function apply(app) {
   const menuController = new MenuController({ categoryModel, menuModel });
   const foodIngredientsController = new FoodIngredientsController({ foodIngredientsModel });
   const detailFoodIngredientsController = new DetailFoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
+  const menuIngredientsController = new MenuIngredientsController({ menuModel, foodIngredientsModel, menuIngredientsModel });
   
   app.get("/", applicationController.handleGetRoot);
 
@@ -58,6 +62,12 @@ function apply(app) {
   app.post("/api/v1/type-food-ingredients", detailFoodIngredientsController.handleCreateDetailFoodIngredients);
   app.get("/api/v1/type-food-ingredients", detailFoodIngredientsController.handleListDetailFoodIngredients);
   app.get("/api/v1/type-food-ingredients/:id", detailFoodIngredientsController.handleGetDetailFoodIngredients);
+
+  app.post("/api/v1/new-menu-ingredients", menuIngredientsController.handleCreateMenuIngredients);
+  app.get("/api/v1/menu-ingredients", menuIngredientsController.handleListMenuIngredients);
+  app.get("/api/v1/menu-ingredients/:id", menuIngredientsController.handleGetMenuIngredients);
+  app.get("/api/v1/menu-ingredients/:menu_id/ingredients", menuIngredientsController.handleGetMenuIngredientsByMenuID);
+  app.put("/api/v1/menu-ingredients/:menu_id", menuIngredientsController.handleUpdateMenuIngredients);
 
   app.use(applicationController.handleNotFound);
   app.use(applicationController.handleError);
