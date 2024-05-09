@@ -21,6 +21,7 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "node-schedule": "^2.1.1",
     "pg": "^8.11.3",
     "sequelize": "^6.37.1",
     "sequelize-cli": "^6.6.2",

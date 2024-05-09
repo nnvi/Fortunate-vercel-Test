@@ -1,4 +1,3 @@
-const menu_ingredients = require('../models/menu_ingredients');
 const ApplicationController = require('./ApplicationController');
 
 class MenuIngredientsController extends ApplicationController {

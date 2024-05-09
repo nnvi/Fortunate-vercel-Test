@@ -19,10 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     cust_name: DataTypes.STRING,
     table_number: DataTypes.INTEGER,
     order_status: DataTypes.BOOLEAN,
-    admin_acc_id: {
-      allowNull: true,
-      type: DataTypes.INTEGER
-    }
+    admin_acc_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'order',

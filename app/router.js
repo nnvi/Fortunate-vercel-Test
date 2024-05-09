@@ -10,6 +10,7 @@ const {
    FoodIngredientsController,
    DetailFoodIngredientsController,
    MenuIngredientsController,
+   OrderController
   } = require("./controllers");
 
 const { 
@@ -19,6 +20,7 @@ const {
   food_ingredients,
   detail_food_ingredients,
   menu_ingredients,
+  order
 } = require("./models");
 
 function apply(app) {
@@ -28,6 +30,7 @@ function apply(app) {
   const foodIngredientsModel = food_ingredients;
   const detailFoodIngredientsModel = detail_food_ingredients;
   const menuIngredientsModel = menu_ingredients;
+  const orderModel = order;
 
   const applicationController = new ApplicationController();
   const authenticationController = new AuthenticationController({ bcrypt, jwt, adminModel });
@@ -36,6 +39,7 @@ function apply(app) {
   const foodIngredientsController = new FoodIngredientsController({ foodIngredientsModel });
   const detailFoodIngredientsController = new DetailFoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   const menuIngredientsController = new MenuIngredientsController({ menuModel, foodIngredientsModel, menuIngredientsModel });
+  const orderController = new OrderController({ adminModel, orderModel });
   
   app.get("/", applicationController.handleGetRoot);
 
@@ -68,6 +72,12 @@ function apply(app) {
   app.get("/api/v1/menu-ingredients/:id", menuIngredientsController.handleGetMenuIngredients);
   app.get("/api/v1/menu-ingredients/:menu_id/ingredients", menuIngredientsController.handleGetMenuIngredientsByMenuID);
   app.put("/api/v1/menu-ingredients/:menu_id", menuIngredientsController.handleUpdateMenuIngredients);
+
+  app.post("/api/v1/new-order", orderController.handleCreateOrder);
+  app.get("/api/v1/order", orderController.handleListOrder);
+  app.get("/api/v1/order/:id", orderController.handleGetOrder);
+  app.put("/api/v1/order/:id", orderController.handleUpdateOrder);
+  app.delete("/api/v1/order/:id", orderController.handleDeleteScheduledOrder);
 
   app.use(applicationController.handleNotFound);
   app.use(applicationController.handleError);
