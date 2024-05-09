@@ -7,6 +7,7 @@ class OrderController extends ApplicationController {
     super();
     this.adminModel = adminModel;
     this.orderModel = orderModel;
+    this.scheduleJob = null;
     // Bind the deleteScheduledOrders method
     // Schedule job to delete orders with status 0 after 15 minutes
     scheduleJob('*/1 * * * *', () => this.handleDeleteScheduledOrder());
@@ -87,12 +88,20 @@ class OrderController extends ApplicationController {
     try {
       const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
 
-      const ordersToDelete = await this.orderModel.findAll({
-        where: {
-          order_status: '0', // Status 0 (belum selesai)
-          createdAt: { [Op.lt]: fifteenMinutesAgo } // Dibuat lebih dari 15 menit yang lalu
-        }
+      // Cek pesanan dengan ID lebih besar dari pesanan terakhir yang dihapus
+      const latestOrder = await this.orderModel.findOne({
+        order: [['order_id', 'DESC']], // Urutkan berdasarkan ID secara menurun
       });
+
+
+      if (latestOrder) {
+        const ordersToDelete = await this.orderModel.findAll({
+          where: {
+            order_status: '0', // Status 0 (belum selesai)
+            createdAt: { [Op.lt]: fifteenMinutesAgo }, // Dibuat lebih dari 15 menit yang lalu
+            order_id: { [Op.lte]: latestOrder.order_id } // ID kurang dari atau sama dengan ID terakhir
+          }
+        });
 
       if (ordersToDelete.length > '0') {
         // Hapus pesanan yang memenuhi kondisi
@@ -106,6 +115,15 @@ class OrderController extends ApplicationController {
         // Simpan status operasi gagal
         this.lastScheduledDeleteStatus = { success: false, message: "No orders found to delete." };
       }
+    }
+    
+    // Batalkan pekerjaan penjadwalan jika pesanan terakhir tidak ditemukan
+    if (!latestOrder) {
+        if (this.scheduledJob) {
+          cancelJob(this.scheduledJob);
+        }
+    }
+
     } catch (error) {
       console.error("Error deleting scheduled orders:", error);
       // Simpan status operasi gagal
