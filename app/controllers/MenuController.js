@@ -97,7 +97,9 @@ class MenuController extends ApplicationController {
   }
 
   handleListMenu = async (req, res) => {
-    const menu = await this.menuModel.findAll()
+    const menu = await this.menuModel.findAll({
+      include: this.categoryModel
+    })
 
     res.status(200).json(menu)
   }

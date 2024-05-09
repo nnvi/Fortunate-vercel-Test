@@ -4,6 +4,8 @@ const CategoryController = require("./CategoryController");
 const DetailFoodIngredientsController = require("./DetailFoodIngredientsController");
 const FoodIngredientsController = require("./FoodIngredientsController");
 const MenuController = require("./MenuController");
+const MenuIngredientsController = require("./MenuIngredientsController");
+const OrderController = require("./OrderController");
 
 module.exports = {
   ApplicationController,
@@ -11,5 +13,7 @@ module.exports = {
   CategoryController,
   MenuController,
   FoodIngredientsController,
-  DetailFoodIngredientsController
+  DetailFoodIngredientsController,
+  MenuIngredientsController,
+  OrderController
 }
