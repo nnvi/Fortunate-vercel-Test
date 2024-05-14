@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         });
 
         this.belongsToMany(models.food_ingredients, {
-          through: 'MenuFoodIngredients', // Nama model perantara
+          through: 'menu_ingredients', // Nama model perantara
           foreignKey: 'menu_ingredients_id', // Kunci luar model menu_ingredients pada model perantara
           otherKey: 'food_ingredients_id' // Kunci luar model food_ingredients pada model perantara
         });

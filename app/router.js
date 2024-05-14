@@ -10,7 +10,8 @@ const {
    FoodIngredientsController,
    DetailFoodIngredientsController,
    MenuIngredientsController,
-   OrderController
+   OrderController,
+   DetailOrderController
   } = require("./controllers");
 
 const { 
@@ -20,7 +21,8 @@ const {
   food_ingredients,
   detail_food_ingredients,
   menu_ingredients,
-  order
+  order,
+  detail_order,
 } = require("./models");
 
 function apply(app) {
@@ -31,6 +33,7 @@ function apply(app) {
   const detailFoodIngredientsModel = detail_food_ingredients;
   const menuIngredientsModel = menu_ingredients;
   const orderModel = order;
+  const detailOrderModel = detail_order;
 
   const applicationController = new ApplicationController();
   const authenticationController = new AuthenticationController({ bcrypt, jwt, adminModel });
@@ -40,6 +43,7 @@ function apply(app) {
   const detailFoodIngredientsController = new DetailFoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   const menuIngredientsController = new MenuIngredientsController({ menuModel, foodIngredientsModel, menuIngredientsModel });
   const orderController = new OrderController({ adminModel, orderModel });
+  const detailOrderController = new DetailOrderController({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel });
   
   app.get("/", applicationController.handleGetRoot);
 
@@ -78,6 +82,11 @@ function apply(app) {
   app.get("/api/v1/order/:id", orderController.handleGetOrder);
   app.put("/api/v1/order/:id", orderController.handleUpdateOrder);
   app.delete("/api/v1/order/:id", orderController.handleDeleteScheduledOrder);
+
+  app.post("/api/v1/new-detail-order", detailOrderController.handleCreateDetailOrder);
+  app.get("/api/v1/detail-order", detailOrderController.handleListDetailOrder);
+  app.get("/api/v1/detail-order/:id", detailOrderController.handleGetDetailOrder);
+  app.get("/api/v1/detail-order/:order_id/order", detailOrderController.handleGetDetailOrderByOrderID);
 
   app.use(applicationController.handleNotFound);
   app.use(applicationController.handleError);
