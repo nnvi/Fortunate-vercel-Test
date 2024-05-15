@@ -40,9 +40,22 @@ class FoodIngredientsController extends ApplicationController {
   }
 
   handleGetFoodIngredients = async (req, res) => {
-    const foodIngredients = await this.getFoodIngredientsFromRequest(req);
+    try {
+      const foodIngredients = await this.getFoodIngredientsFromRequest(req);
+      const alert = foodIngredients.food_ingredients_stock <= 5
+        ? `Stock for ${foodIngredients.food_ingredients_name} is running low.`
+        : null;
 
-    res.status(200).json(foodIngredients);
+      const response = { ...foodIngredients.toJSON(), alert }; // Menambahkan alert ke dalam objek foodIngredients
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(404).json({
+        error: {
+          name: error.name,
+          message: error.message
+        }
+      });
+    }
   }
 
   handleUpdateFoodIngredients = async (req, res) => {
@@ -87,9 +100,25 @@ class FoodIngredientsController extends ApplicationController {
   }
 
   handleListFoodIngredients = async (req, res) => {
-    const foodIngredients = await this.foodIngredientsModel.findAll()
+    try {
+      const foodIngredients = await this.foodIngredientsModel.findAll();
 
-    res.status(200).json(foodIngredients)
+      const response = foodIngredients.map(fi => {
+        const alert = fi.food_ingredients_stock <= 5
+          ? `Stock for ${fi.food_ingredients_name} is running low.`
+          : null;
+        return { ...fi.toJSON(), alert }; // Menambahkan alert ke dalam objek foodIngredients
+      });
+
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(404).json({
+        error: {
+          name: error.name,
+          message: error.message
+        }
+      });
+    }
   }
 
   getFoodIngredientsFromRequest(req) {

@@ -19,12 +19,12 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      menu_ingredients_id: {
+      menu_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: { // Definisi foreign key
-          model: 'menu_ingredients', // Nama tabel target
-          key: 'menu_ingredients_id' // Kolom target yang menjadi primary key
+          model: 'menu', // Nama tabel target
+          key: 'menu_id' // Kolom target yang menjadi primary key
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         });
 
         this.hasMany(models.menu_ingredients, {
-            foreignKey: "menu_ingredients_id"
+            foreignKey: "menu_id"
         });
     }
   }
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER
     },
-    menu_ingredients_id: {
+    menu_id: {
       allowNull: false,
       type: DataTypes.INTEGER
     },
