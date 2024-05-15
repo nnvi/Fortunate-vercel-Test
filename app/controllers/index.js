@@ -2,6 +2,7 @@ const ApplicationController = require("./ApplicationController");
 const AuthenticationController = require("./AuthenticationController");
 const CategoryController = require("./CategoryController");
 const DetailFoodIngredientsController = require("./DetailFoodIngredientsController");
+const DetailOrderController = require("./DetailOrderController");
 const FoodIngredientsController = require("./FoodIngredientsController");
 const MenuController = require("./MenuController");
 const MenuIngredientsController = require("./MenuIngredientsController");
@@ -15,5 +16,6 @@ module.exports = {
   FoodIngredientsController,
   DetailFoodIngredientsController,
   MenuIngredientsController,
-  OrderController
+  OrderController,
+  DetailOrderController
 }

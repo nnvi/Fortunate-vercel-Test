@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: "order_id"
         });
 
-        this.hasMany(models.menu, {
+        this.hasMany(models.menu_ingredients, {
             foreignKey: "menu_id"
         });
     }
