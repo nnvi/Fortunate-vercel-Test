@@ -3,9 +3,9 @@ const { scheduleJob, cancelJob } = require('node-schedule');
 const ApplicationController = require('./ApplicationController');
 
 class OrderController extends ApplicationController {
-  constructor({ adminModel, orderModel }) {
+  constructor({ userModel, orderModel }) {
     super();
-    this.adminModel = adminModel;
+    this.userModel = userModel;
     this.orderModel = orderModel;
     this.scheduleJob = null;
     // Bind the deleteScheduledOrders method
@@ -19,22 +19,22 @@ class OrderController extends ApplicationController {
         cust_name,
         table_number,
         order_status,
-        admin_acc_id
+        user_acc_id
       } = req.body;
 
-      const adminAcc = await this.adminModel.findOne({
-        where: { admin_acc_id: admin_acc_id }
+      const userAcc = await this.userModel.findOne({
+        where: { user_acc_id: user_acc_id }
       });
 
-      if(!adminAcc) {
-        return res.status(400).json({ error: { message: "Admin not found." } });
+      if(!userAcc) {
+        return res.status(400).json({ error: { message: "User not found." } });
       }
 
       const order = await this.orderModel.create({
         cust_name,
         table_number,
         order_status,
-        admin_acc_id
+        user_acc_id
       });
 
       res.status(201).json(order);
