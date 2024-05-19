@@ -3,23 +3,24 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class admin_acc extends Model {
+  class user_acc extends Model {
     static associate() {
     }
   }
-  admin_acc.init({
-    admin_acc_id: {
+  user_acc.init({
+    user_acc_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
     username: DataTypes.STRING,
     password: DataTypes.STRING,
+    role: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'admin_acc',
-    tableName: 'admin_acc',
+    modelName: 'user_acc',
+    tableName: 'user_acc',
     timestamps: false,
   });
-  return admin_acc;
+  return user_acc;
 };

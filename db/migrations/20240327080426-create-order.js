@@ -29,12 +29,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      admin_acc_id: {
+      user_acc_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: { // Definisi foreign key
-          model: 'admin_acc', // Nama tabel target
-          key: 'admin_acc_id' // Kolom target yang menjadi primary key
+          model: 'user_acc', // Nama tabel target
+          key: 'user_acc_id' // Kolom target yang menjadi primary key
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'

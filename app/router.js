@@ -15,7 +15,7 @@ const {
   } = require("./controllers");
 
 const { 
-  admin_acc,
+  user_acc,
   category,
   menu,
   food_ingredients,
@@ -26,7 +26,7 @@ const {
 } = require("./models");
 
 function apply(app) {
-  const adminModel = admin_acc;
+  const userModel = user_acc;
   const categoryModel = category;
   const menuModel = menu;
   const foodIngredientsModel = food_ingredients;
@@ -36,18 +36,20 @@ function apply(app) {
   const detailOrderModel = detail_order;
 
   const applicationController = new ApplicationController();
-  const authenticationController = new AuthenticationController({ bcrypt, jwt, adminModel });
+  const authenticationController = new AuthenticationController({ bcrypt, jwt, userModel });
+  const accessControl = authenticationController.accessControl;
   const categoryController = new CategoryController({ categoryModel });
   const menuController = new MenuController({ categoryModel, menuModel });
   const foodIngredientsController = new FoodIngredientsController({ foodIngredientsModel });
   const detailFoodIngredientsController = new DetailFoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   const menuIngredientsController = new MenuIngredientsController({ menuModel, foodIngredientsModel, menuIngredientsModel });
-  const orderController = new OrderController({ adminModel, orderModel });
+  const orderController = new OrderController({ userModel, orderModel });
   const detailOrderController = new DetailOrderController({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel });
   
   app.get("/", applicationController.handleGetRoot);
 
   app.post("/v1/auth/login", authenticationController.handleLogin);
+  app.get("/v1/auth/whoami", authenticationController.authorize(accessControl.OWNER), authenticationController.handleGetUser);
 
   app.post("/api/v1/new-category", categoryController.handleCreateCategory);
   app.get("/api/v1/category", categoryController.handleListCategory);

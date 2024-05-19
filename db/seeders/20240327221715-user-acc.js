@@ -3,6 +3,18 @@
 const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
 
+const users = [
+  "owner",
+  "admin",
+  "cashier"  
+]
+
+const passwords = [
+  "F0rtunate_C4f3",
+  "Duni4_s4tu_kelu4rg4",
+  "Berk4h_sel4lu"
+]
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -15,13 +27,15 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   const password = "F0rtun4t3_C4f3"
-   const encryptedPassword = bcrypt.hashSync(password, 10);
+   const encryptedPassword = passwords.map(password => bcrypt.hashSync(password, 10));
 
-    await queryInterface.bulkInsert('admin_acc', [{
-      username: 'admin',
-      password: encryptedPassword
-    }], {});
+   const userAcc = users.map((user, index) => ({
+    username: user,
+    password: encryptedPassword[index],
+    role: user.toUpperCase()
+   }))
+
+    await queryInterface.bulkInsert('user_acc', userAcc, {});
   },
 
   async down (queryInterface, Sequelize) {
@@ -31,6 +45,10 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('admin_acc', null, {});
+    await queryInterface.bulkDelete('user_acc', {
+      username: {
+        [Op.in]: users
+      }
+    }, {});
   }
 };
