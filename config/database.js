@@ -3,8 +3,7 @@ const {
   PGPORT = "5432",
   PGUSER = "postgres",
   PGPASSWORD = "fendys",
-  PGDATABASE = "fortunate-coffee",
-  DATABASE_URL = "postgresql://postgres:kesbltRkSgEBOQqcpOcMTjiDVCjrIIuo@roundhouse.proxy.rlwy.net:53506/railway"
+  PGDATABASE = "fortunate-coffee"
 } = process.env;
 
 module.exports = {
@@ -31,7 +30,5 @@ module.exports = {
     host: PGHOST,
     port: PGPORT,
     dialect: "postgres",
-    // Gunakan DATABASE_URL dari lingkungan produksi
-    url: DATABASE_URL
   }
 }
