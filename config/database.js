@@ -1,34 +1,37 @@
 const {
-  DB_USER = "postgres",
-  DB_PASSWORD = "fendys",
-  DB_NAME = "fortunate-coffee",
-  DB_HOST = "postgresql://postgres:hCAYUZzpedqxfKwKUQnbdJGlVyECZkum@viaduct.proxy.rlwy.net:30775/railway",
-  DB_PORT = "5432",
+  PGHOST = "localhost",
+  PGPORT = "5432",
+  PGUSER = "postgres",
+  PGPASSWORD = "fendys",
+  PGDATABASE = "fortunate-coffee",
+  DATABASE_URL = "postgresql://postgres:kesbltRkSgEBOQqcpOcMTjiDVCjrIIuo@roundhouse.proxy.rlwy.net:53506/railway"
 } = process.env;
 
 module.exports = {
   development: {
-    username: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_NAME,
-    host: DB_HOST,
-    port: DB_PORT,
+    username: PGUSER,
+    password: PGPASSWORD,
+    database: PGDATABASE,
+    host: PGHOST,
+    port: PGPORT,
     dialect: "postgres"
   },
   test: {
-    username: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_NAME,
-    host: DB_HOST,
-    port: DB_PORT,
+    username: PGUSER,
+    password: PGPASSWORD,
+    database: PGDATABASE,
+    host: PGHOST,
+    port: PGPORT,
     dialect: "postgres"
   },
   production: {
-    username: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_NAME,
-    host: DB_HOST,
-    port: DB_PORT,
-    dialect: "postgres"
+    username: PGUSER,
+    password: PGPASSWORD,
+    database: PGDATABASE,
+    host: PGHOST,
+    port: PGPORT,
+    dialect: "postgres",
+    // Gunakan DATABASE_URL dari lingkungan produksi
+    url: DATABASE_URL
   }
 }
