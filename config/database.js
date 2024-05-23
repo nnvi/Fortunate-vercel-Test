@@ -29,6 +29,7 @@ module.exports = {
     database: PGDATABASE,
     host: PGHOST,
     port: PGPORT,
+    use_env_variable: "DATABASE_URL",
     dialect: "postgres",
   }
 }

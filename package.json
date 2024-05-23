@@ -11,6 +11,7 @@
     "db:migrate": "sequelize db:migrate",
     "db:seed": "sequelize db:seed:undo:all && sequelize db:seed:all",
     "db:setup": "yarn db:drop && yarn db:create && yarn db:migrate && yarn db:seed",
+    "db:setup-prod": "yarn db:drop && yarn db:create && yarn db:migrate && yarn db:seed --env production",
     "eslint": "eslint ./app",
     "test": "jest"
   },
