@@ -2,7 +2,7 @@ const {
   DB_USER = "postgres",
   DB_PASSWORD = "fendys",
   DB_NAME = "fortunate-coffee",
-  DB_HOST = "localhost",
+  DB_HOST = "postgresql://postgres:hCAYUZzpedqxfKwKUQnbdJGlVyECZkum@viaduct.proxy.rlwy.net:30775/railway",
   DB_PORT = "5432",
 } = process.env;
 
