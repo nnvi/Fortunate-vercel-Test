@@ -10,4 +10,5 @@ app.use(express.json());
 app.use('/', router);
 
 // Ubah aplikasi Express menjadi serverless function
+module.exports = app;
 module.exports.handler = serverless(app);
