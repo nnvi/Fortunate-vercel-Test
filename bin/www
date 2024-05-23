@@ -1,15 +1,8 @@
 #!/usr/bin/env node
 
-const app = require('../app');
-const serverless = require('serverless-http');
-
-// Pastikan Anda mengatur environment variable PORT dengan default 3001
+const app = require("../app");
 const { PORT = 3001 } = process.env;
 
-if (process.env.NODE_ENV === 'development') {
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Listening on port http://localhost:${PORT}`);
-  });
-} else {
-  module.exports = serverless(app);
-}
+app.listen(PORT, "0.0.0.0", () => {
+    console.log("Listening on port http://localhost:" + PORT);
+});
