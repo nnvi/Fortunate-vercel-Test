@@ -1,6 +1,7 @@
 const ApplicationController = require("./ApplicationController");
-const { NotFoundError, WrongPasswordError, InsufficientAccessError } = require("../errors");
+const { ApiError, NotFoundError, WrongPasswordError, InsufficientAccessError } = require("../errors");
 const { JWT_SIGNATURE_KEY } = require("../../config/application");
+const httpStatus = require('http-status');
 
 class AuthenticationController extends ApplicationController {
   constructor({
@@ -47,6 +48,34 @@ class AuthenticationController extends ApplicationController {
     }
   }
 
+  authorizeRoles = (roles) => {
+    return (req, res, next) => {
+      try {
+        const token = req.headers.authorization?.split("Bearer ")[1];
+        const payload = this.decodeToken(token);
+  
+        console.log('Token payload:', payload);
+  
+        if (!roles.includes(payload.role)) {
+          throw new InsufficientAccessError(payload.role);
+        }
+  
+        req.user_acc = payload;
+        next();
+      } catch (err) {
+        res.status(403).json({
+          error: {
+            name: err.name,
+            message: "Access forbidden!",
+            details: {
+              role: err.details
+            }
+          }
+        });
+      }
+    };
+  };
+
   handleLogin = async (req, res, next) => {
     try {
       const username = req.body.username.toLowerCase();
@@ -69,9 +98,18 @@ class AuthenticationController extends ApplicationController {
 
       const accessToken = this.createToken({ user_acc_id: user.user_acc_id, username: user.username, role: user.role });
 
-      res.status(201).json({ accessToken });
+      res.status(201).json({
+        status: "OK",
+        message: "Success Login",
+        user: user.username,
+        accessToken,
+      });
     } catch (err) {
       next(err);
+      res.status(err.statusCode || 400).json({
+        status: "FAIL",
+        message: err.message,
+      });
     }
   }
 
