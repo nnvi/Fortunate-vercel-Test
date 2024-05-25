@@ -57,30 +57,30 @@ function apply(app) {
   // Category routes
   app.route("/api/v1/category")
     .post(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), uploader.single('category_image'), categoryController.handleCreateCategory)
-    .get(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), categoryController.handleListCategory);
+    .get(categoryController.handleListCategory);
 
   app.route("/api/v1/category/:id")
-    .get(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), categoryController.handleGetCategory)
+    .get(categoryController.handleGetCategory)
     .put(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), uploader.single('category_image'), categoryController.handleUpdateCategory)
     .delete(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), categoryController.handleDeleteCategory);
 
   // Menu routes
   app.route("/api/v1/menu")
     .post(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), uploader.single('menu_image'), menuController.handleCreateMenu)
-    .get(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), menuController.handleListMenu);
+    .get(menuController.handleListMenu);
 
   app.route("/api/v1/menu/:id")
-    .get(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), menuController.handleGetMenu)
+    .get(menuController.handleGetMenu)
     .put(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), uploader.single('menu_image'), menuController.handleUpdateMenu)
     .delete(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), menuController.handleDeleteMenu);
 
   // Food Ingredients routes
   app.route("/api/v1/food-ingredients")
     .post(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), foodIngredientsController.handleCreateFoodIngredients)
-    .get(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), foodIngredientsController.handleListFoodIngredients);
+    .get(foodIngredientsController.handleListFoodIngredients);
 
   app.route("/api/v1/food-ingredients/:id")
-    .get(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), foodIngredientsController.handleGetFoodIngredients)
+    .get(foodIngredientsController.handleGetFoodIngredients)
     .put(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), foodIngredientsController.handleUpdateFoodIngredients)
     .delete(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), foodIngredientsController.handleDeleteFoodIngredients);
 
@@ -106,7 +106,7 @@ function apply(app) {
 
   // Order routes
   app.route("/api/v1/order")
-    .post(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.CASHIER]), orderController.handleCreateOrder)
+    .post(orderController.handleCreateOrder)
     .get(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.CASHIER]), orderController.handleListOrder);
 
   app.route("/api/v1/order/:id")
@@ -116,7 +116,7 @@ function apply(app) {
 
   // Detail Order routes
   app.route("/api/v1/detail-order")
-    .post(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.CASHIER]), detailOrderController.handleCreateDetailOrder)
+    .post(detailOrderController.handleCreateDetailOrder)
     .get(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.CASHIER]), detailOrderController.handleListDetailOrder);
 
   app.route("/api/v1/detail-order/:id")
