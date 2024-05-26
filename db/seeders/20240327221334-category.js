@@ -18,18 +18,18 @@ const names = [
 ]
 
 const images = [
-  "https://i.ibb.co/dG93YXz/Limited-Offer.jpg",
-  "https://ibb.co/9NhCQmKhttps://i.ibb.co/SPc9FDY/Fortunate-Bread.jpg",
-  "https://ibb.co/https://i.ibb.co/8bQpM7q/Asian-Cuisine.webp",
-  "https://ibb.co/https://i.ibb.co/nzzS98M/Spaghetti.jpg",
-  "https://ibb.co/https://i.ibb.co/dBSKC5k/Fortunate-Rice.jpg",
-  "https://ibb.co/https://i.ibb.co/Tqzvt6J/Fast-Food.png",
-  "https://ibb.co/https://i.ibb.co/KbnCkG7/Miscellaneous.jpg",
-  "https://ibb.co/https://i.ibb.co/YNzPsC6/Fortunate-Coffee.jpg",
-  "https://ibb.co/https://i.ibb.co/bNrsMzy/Fortunate-Tea.jpg",
-  "https://ibb.co/https://i.ibb.co/Kw92q7C/Fresh-Juice.webp",
-  "https://ibb.co/https://i.ibb.co/xLL3fqC/Fresh-Mocktail.jpg",
-  "https://ibb.co/https://i.ibb.co/3s7056t/Fortunate-Dessert.jpg"
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Limited%20Offer.jpg?updatedAt=1716675783105",
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Fortunate%20Bread.jpeg?updatedAt=1716675783368",
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Asian%20Cuisine.jpeg?updatedAt=1716675783618",
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Spaghetti.jpg?updatedAt=1716675786903",
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Fortunate%20Rice.jpg?updatedAt=1716675782922",
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Fast%20Food.png?updatedAt=1716675784293",
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Miscellaneous.jpg?updatedAt=1716675787051",
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Fortunate%20Coffee.jpeg?updatedAt=1716675783816",
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Fortunate%20Tea.jpg?updatedAt=1716675783012",
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Fresh%20Juice.webp?updatedAt=1716675783582",
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Fresh%20Mocktail.jpeg?updatedAt=1716675783686",
+  "https://ik.imagekit.io/fndsjy/Fortunate_Coffee/Category/Fortunate%20Dessert.jpg?updatedAt=1716675783436"
 ]
 
 /** @type {import('sequelize-cli').Migration} */
