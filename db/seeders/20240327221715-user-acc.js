@@ -10,9 +10,9 @@ const users = [
 ]
 
 const passwords = [
-  "F0rtunate_C4f3",
-  "Duni4_s4tu_kelu4rg4",
-  "Berk4h_sel4lu"
+  "owner123",
+  "admin321",
+  "cashier321"
 ]
 
 /** @type {import('sequelize-cli').Migration} */
