@@ -73,6 +73,9 @@ function apply(app) {
     .get(menuController.handleGetMenu)
     .put(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), uploader.single('menu_image'), menuController.handleUpdateMenu)
     .delete(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), menuController.handleDeleteMenu);
+  
+  app.get("/api/v1/menu/category/:id", menuController.handleGetMenuByCategoryId);
+  app.get("/api/v1/menu/search", menuController.handleSearch);
 
   // Food Ingredients routes
   app.route("/api/v1/food-ingredients")

@@ -1,5 +1,6 @@
 const ApplicationController = require('./ApplicationController');
 const imagekit = require('../lib/imageKitConfig');
+const { Op } = require('sequelize');
 
 class MenuController extends ApplicationController {
   constructor({ categoryModel, menuModel }) {
@@ -142,6 +143,63 @@ class MenuController extends ApplicationController {
     })
 
     res.status(200).json(menu)
+  }
+
+  handleGetMenuByCategoryId = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const menus = await this.menuModel.findAll({
+        where: { category_id: id },
+        include: this.categoryModel
+      });
+
+      if (menus.length === 0) {
+        return res.status(404).json({ error: 'No menus found for this category' });
+      }
+
+      res.status(200).json(menus);
+    } catch (error) {
+      console.error('Error getting menus by category ID:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  handleSearch = async (req, res) => {
+    try {
+      const { query } = req.query;
+      console.log(`Received search query: ${query}`);
+  
+      // Check for menu
+      const menu = await this.menuModel.findOne({
+        where: { menu_name: { [Op.like]: `%${query}%` } },
+        include: this.categoryModel
+      });
+  
+      if (menu) {
+        console.log('Menu found:', menu);
+
+        // Fetch the category details by ID
+        const category = await this.categoryModel.findByPk(menu.category_id);
+
+        if (!category) {
+          return res.status(404).json({ error: 'Category not found' });
+        }
+
+        return res.status(200).json({
+          type: 'menu',
+          data: {
+            menu: menu,
+            category: category
+          }
+        });
+      }
+  
+      console.log('No results found for query:', query);
+      return res.status(404).json({ error: 'No results found' });
+    } catch (error) {
+      console.error('Error during search:', error);
+      return res.status(500).json({ error: error.message });
+    }
   }
 
   getMenuFromRequest(req) {
