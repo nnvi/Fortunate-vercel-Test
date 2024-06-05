@@ -1,9 +1,11 @@
 const ApplicationController = require('./ApplicationController');
+const { Op } = require('sequelize');
 
 class FoodIngredientsController extends ApplicationController {
-  constructor({ foodIngredientsModel }) {
+  constructor({ foodIngredientsModel, detailFoodIngredientsModel }) {
     super();
     this.foodIngredientsModel = foodIngredientsModel;
+    this.detailFoodIngredientsModel = detailFoodIngredientsModel;
   }
 
   handleCreateFoodIngredients = async (req, res) => {
@@ -111,6 +113,57 @@ class FoodIngredientsController extends ApplicationController {
       });
 
       res.status(200).json(response);
+    } catch (error) {
+      res.status(404).json({
+        error: {
+          name: error.name,
+          message: error.message
+        }
+      });
+    }
+  }
+
+  handleGetFilteredFoodIngredients = async (req, res) => {
+    try {
+      const { food_ingredients_id, type, period } = req.query;
+      
+      let dateFilter = {};
+      const today = new Date();
+      switch (period) {
+        case 'Today':
+          dateFilter = { [Op.gte]: today.setHours(0, 0, 0, 0) };
+          break;
+        case 'Last 7 days':
+          dateFilter = { [Op.gte]: new Date(today - 7 * 24 * 60 * 60 * 1000) };
+          break;
+        case 'Last 30 days':
+          dateFilter = { [Op.gte]: new Date(today - 30 * 24 * 60 * 60 * 1000) };
+          break;
+        case 'Last 3 months':
+          dateFilter = { [Op.gte]: new Date(today - 3 * 30 * 24 * 60 * 60 * 1000) };
+          break;
+        default:
+          break;
+      }
+
+      let filter = {
+        where: {
+          updatedAt: dateFilter
+        }
+      };
+
+      if (food_ingredients_id) {
+        filter.where.food_ingredients_id = food_ingredients_id;
+      }
+
+      if (type === 'Remaining Stock') {
+        const foodIngredients = await this.foodIngredientsModel.findAll(filter);
+        res.status(200).json(foodIngredients);
+      } else {
+        filter.where.detail_food_ingredients_type = type;
+        const detailFoodIngredients = await this.detailFoodIngredientsModel.findAll(filter);
+        res.status(200).json(detailFoodIngredients);
+      }
     } catch (error) {
       res.status(404).json({
         error: {
