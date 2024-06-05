@@ -41,7 +41,7 @@ function apply(app) {
   const accessControl = authenticationController.accessControl;
   const categoryController = new CategoryController({ categoryModel });
   const menuController = new MenuController({ categoryModel, menuModel });
-  const foodIngredientsController = new FoodIngredientsController({ foodIngredientsModel });
+  const foodIngredientsController = new FoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   const detailFoodIngredientsController = new DetailFoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   const menuIngredientsController = new MenuIngredientsController({ menuModel, foodIngredientsModel, menuIngredientsModel });
   const orderController = new OrderController({ userModel, orderModel });
@@ -87,6 +87,10 @@ function apply(app) {
     .put(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), foodIngredientsController.handleUpdateFoodIngredients)
     .delete(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), foodIngredientsController.handleDeleteFoodIngredients);
 
+  // New route for filtered food ingredients
+  app.route("/api/v1/filtered-food-ingredients")
+    .get(foodIngredientsController.handleGetFilteredFoodIngredients);
+    
   // Detail Food Ingredients routes
   app.route("/api/v1/type-food-ingredients")
     .post(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), detailFoodIngredientsController.handleCreateDetailFoodIngredients)
