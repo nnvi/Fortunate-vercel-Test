@@ -160,11 +160,11 @@ class FoodIngredientsController extends ApplicationController {
         const foodIngredients = await this.foodIngredientsModel.findAll(filter);
         res.status(200).json(foodIngredients);
       } 
-      // else {
-      //   filter.where.detail_food_ingredients_type = type;
-      //   const detailFoodIngredients = await this.detailFoodIngredientsModel.findAll(filter);
-      //   res.status(200).json(detailFoodIngredients);
-      // }
+      else {
+        filter.where.detail_food_ingredients_type = type;
+        const detailFoodIngredients = await this.detailFoodIngredientsModel.findAll(filter);
+        res.status(200).json(detailFoodIngredients);
+      }
     } catch (error) {
       res.status(404).json({
         error: {
