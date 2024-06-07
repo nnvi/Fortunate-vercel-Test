@@ -10,7 +10,8 @@ const {
   DetailFoodIngredientsController,
   MenuIngredientsController,
   OrderController,
-  DetailOrderController
+  DetailOrderController,
+  CartController
 } = require("./controllers");
 
 const { 
@@ -46,6 +47,7 @@ function apply(app) {
   const menuIngredientsController = new MenuIngredientsController({ menuModel, foodIngredientsModel, menuIngredientsModel });
   const orderController = new OrderController({ userModel, orderModel });
   const detailOrderController = new DetailOrderController({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel });
+  const cartController = new CartController({ menuModel });
 
   // Root route
   app.get("/", applicationController.handleGetRoot);
@@ -87,7 +89,7 @@ function apply(app) {
     .put(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), foodIngredientsController.handleUpdateFoodIngredients)
     .delete(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), foodIngredientsController.handleDeleteFoodIngredients);
 
-  // New route for filtered food ingredients
+  // Filtered food ingredients route
   app.route("/api/v1/filtered-food-ingredients")
     .get(foodIngredientsController.handleGetFilteredFoodIngredients);
     
@@ -110,6 +112,12 @@ function apply(app) {
   app.route("/api/v1/menu-ingredients/:menu_id/ingredients")
     .get(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), menuIngredientsController.handleGetMenuIngredientsByMenuID)
     .put(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), menuIngredientsController.handleUpdateMenuIngredients);
+
+  // Cart routes
+  app.post("/api/v1/cart/checkout", cartController.handleCheckout);
+  app.route("/api/v1/cart")
+    .post(cartController.addToCart)
+    .get(cartController.handleGetCart);
 
   // Order routes
   app.route("/api/v1/order")

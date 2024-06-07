@@ -1,5 +1,6 @@
 const ApplicationController = require("./ApplicationController");
 const AuthenticationController = require("./AuthenticationController");
+const CartController = require("./CartController");
 const CategoryController = require("./CategoryController");
 const DetailFoodIngredientsController = require("./DetailFoodIngredientsController");
 const DetailOrderController = require("./DetailOrderController");
@@ -17,5 +18,6 @@ module.exports = {
   DetailFoodIngredientsController,
   MenuIngredientsController,
   OrderController,
-  DetailOrderController
+  DetailOrderController,
+  CartController
 }
