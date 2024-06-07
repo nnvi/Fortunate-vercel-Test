@@ -131,6 +131,52 @@ class CartController extends ApplicationController {
       });
     }
   }
+
+  getCartByMenuId = async (req, res) => {
+    try {
+      const menuId = parseInt(req.params.menuId);
+
+      // Cari item di keranjang berdasarkan menuId
+      const cartItem = this.cart.find(cartItem => cartItem.menu_id === menuId);
+      console.log(cartItem);
+
+      if (!cartItem) {
+        return res.status(404).json({ error: 'Item not found in the cart' });
+      }
+
+      // Temukan menu terkait dari database (gunakan this.menuModel)
+      const menu = await this.menuModel.findOne({
+        where: { menu_id: menuId }
+      });
+
+      if (!menu) {
+        return res.status(404).json({ error: 'Menu not found' });
+      }
+
+      // Format data yang akan dikembalikan
+      const cartItemDetails = {
+        menu_id: cartItem.menu_id,
+        menu_name: menu.menu_name,
+        menu_price: menu.menu_price,
+        quantity: cartItem.cart_qty,
+        notes: cartItem.notes,
+        total: menu.menu_price * cartItem.cart_qty
+      };
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Cart item fetched successfully',
+        data: cartItemDetails
+      });
+    } catch (error) {
+      res.status(500).json({
+        error: {
+          name: error.name,
+          message: error.message
+        }
+      });
+    }
+  }
 }
 
 module.exports = CartController;

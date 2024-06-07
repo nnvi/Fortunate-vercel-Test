@@ -115,6 +115,7 @@ function apply(app) {
 
   // Cart routes
   app.post("/api/v1/cart/checkout", cartController.handleCheckout);
+  app.get("/api/v1/cart/:menuId", cartController.getCartByMenuId);
   app.route("/api/v1/cart")
     .post(cartController.addToCart)
     .get(cartController.handleGetCart);
