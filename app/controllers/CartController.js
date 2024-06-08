@@ -177,6 +177,35 @@ class CartController extends ApplicationController {
       });
     }
   }
+
+  deleteFromCart = async (req, res) => {
+    try {
+      const menuId = parseInt(req.params.menuId);
+
+      // Cari item di keranjang berdasarkan menuId
+      const itemIndex = this.cart.findIndex(cartItem => cartItem.menu_id === menuId);
+
+      if (itemIndex === -1) {
+        return res.status(404).json({ error: 'Item not found in the cart' });
+      }
+
+      // Hapus item dari keranjang
+      this.cart.splice(itemIndex, 1);
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Item removed from cart',
+        data: this.cart
+      });
+    } catch (error) {
+      res.status(500).json({
+        error: {
+          name: error.name,
+          message: error.message
+        }
+      });
+    }
+  }
 }
 
 module.exports = CartController;
