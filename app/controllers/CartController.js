@@ -59,6 +59,7 @@ class CartController extends ApplicationController {
           menu_id: menuItem.menu_id,
           menu_name: menuItem.menu_name,
           menu_price: menuItem.menu_price,
+          menu_image: menuItem.menu_image,
           quantity: cartItem.cart_qty,
           notes: cartItem.notes, // Include notes in the order details
           total: menuItem.menu_price * cartItem.cart_qty
@@ -111,6 +112,7 @@ class CartController extends ApplicationController {
           menu_id: menuItem.menu_id,
           menu_name: menuItem.menu_name,
           menu_price: menuItem.menu_price,
+          menu_image: menuItem.menu_image,
           quantity: cartItem.cart_qty,
           notes: cartItem.notes, // Include notes in the cart details
           total: menuItem.menu_price * cartItem.cart_qty
@@ -158,6 +160,7 @@ class CartController extends ApplicationController {
         menu_id: cartItem.menu_id,
         menu_name: menu.menu_name,
         menu_price: menu.menu_price,
+        menu_image: menuItem.menu_image,
         quantity: cartItem.cart_qty,
         notes: cartItem.notes,
         total: menu.menu_price * cartItem.cart_qty
