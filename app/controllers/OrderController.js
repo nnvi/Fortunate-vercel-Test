@@ -19,6 +19,7 @@ class OrderController extends ApplicationController {
         cust_name,
         table_number,
         order_status,
+        price_total,
         user_acc_id
       } = req.body;
 
