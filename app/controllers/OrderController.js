@@ -34,6 +34,7 @@ class OrderController extends ApplicationController {
         cust_name,
         table_number,
         order_status,
+        price_total: 0,
         user_acc_id
       });
 

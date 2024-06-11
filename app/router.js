@@ -46,7 +46,7 @@ function apply(app) {
   const detailFoodIngredientsController = new DetailFoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   const menuIngredientsController = new MenuIngredientsController({ menuModel, foodIngredientsModel, menuIngredientsModel });
   const orderController = new OrderController({ userModel, orderModel });
-  const detailOrderController = new DetailOrderController({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel });
+  const detailOrderController = new DetailOrderController({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel, detailFoodIngredientsModel });
   const cartController = new CartController({ menuModel });
 
   // Root route
