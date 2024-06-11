@@ -1,12 +1,13 @@
 const ApplicationController = require('./ApplicationController');
 
 class DetailOrderController extends ApplicationController {
-  constructor({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel }) {
+  constructor({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel, detailFoodIngredientsModel }) {
     super();
     this.foodIngredientsModel = foodIngredientsModel;
     this.menuIngredientsModel = menuIngredientsModel;
     this.orderModel = orderModel;
     this.detailOrderModel = detailOrderModel;
+    this.detailFoodIngredientsModel = detailFoodIngredientsModel;
   }
 
   handleCreateDetailOrder = async (req, res) => {
@@ -79,6 +80,13 @@ class DetailOrderController extends ApplicationController {
             menu_id: menu_id,
             detail_order_qty: detail_order_qty,
             detail_order_notes: detail_order_notes
+          }, { transaction });
+
+          // Create detail food ingredients entry with type "Out"
+          await this.detailFoodIngredientsModel.create({
+            food_ingredients_id: foodIngredient.food_ingredients_id,
+            detail_food_ingredients_qty: requiredStock,
+            detail_food_ingredients_type: 'Out'
           }, { transaction });
           }
         }
