@@ -45,7 +45,7 @@ function apply(app) {
   const foodIngredientsController = new FoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   const detailFoodIngredientsController = new DetailFoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   const menuIngredientsController = new MenuIngredientsController({ menuModel, foodIngredientsModel, menuIngredientsModel });
-  const orderController = new OrderController({ userModel, orderModel });
+  const orderController = new OrderController({ userModel, orderModel, detailOrderModel, menuIngredientsModel, foodIngredientsModel, detailFoodIngredientsModel });
   const detailOrderController = new DetailOrderController({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel, detailFoodIngredientsModel });
   const cartController = new CartController({ menuModel });
 
@@ -91,7 +91,7 @@ function apply(app) {
 
   // Filtered food ingredients route
   app.route("/api/v1/filtered-food-ingredients")
-    .get(foodIngredientsController.handleGetFilteredFoodIngredients);
+    .get(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.ADMIN]), foodIngredientsController.handleGetFilteredFoodIngredients);
     
   // Detail Food Ingredients routes
   app.route("/api/v1/type-food-ingredients")
@@ -134,6 +134,10 @@ function apply(app) {
     .put(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.CASHIER]), orderController.handleUpdateOrder)
     .delete(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.CASHIER]), orderController.handleDeleteScheduledOrder);
 
+  // Filtered order route
+  app.route("/api/v1/filtered-order")
+    .get(authenticationController.authorizeRoles([accessControl.OWNER, accessControl.CASHIER]), orderController.handleGetFilteredOrder)
+ 
   // Detail Order routes
   app.route("/api/v1/detail-order")
     .post(detailOrderController.handleCreateDetailOrder)
