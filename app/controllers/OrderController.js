@@ -3,10 +3,14 @@ const { scheduleJob, cancelJob } = require('node-schedule');
 const ApplicationController = require('./ApplicationController');
 
 class OrderController extends ApplicationController {
-  constructor({ userModel, orderModel }) {
+  constructor({ userModel, orderModel, detailOrderModel, menuIngredientsModel, foodIngredientsModel, detailFoodIngredientsModel }) {
     super();
     this.userModel = userModel;
     this.orderModel = orderModel;
+    this.detailOrderModel = detailOrderModel;
+    this.menuIngredientsModel = menuIngredientsModel;
+    this.foodIngredientsModel = foodIngredientsModel;
+    this.detailFoodIngredientsModel = detailFoodIngredientsModel;
     this.scheduleJob = null;
     // Bind the deleteScheduledOrders method
     // Schedule job to delete orders with status 0 after 15 minutes
@@ -87,52 +91,63 @@ class OrderController extends ApplicationController {
   }
 
   handleDeleteScheduledOrder = async () => {
+    const transaction = await this.orderModel.sequelize.transaction();
     try {
-      const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
-
-      // Cek pesanan dengan ID lebih besar dari pesanan terakhir yang dihapus
-      const latestOrder = await this.orderModel.findOne({
-        order: [['order_id', 'DESC']], // Urutkan berdasarkan ID secara menurun
+      const fifteenMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
+      const ordersToDelete = await this.orderModel.findAll({
+        where: { order_status: '0', createdAt: { [Op.lt]: fifteenMinutesAgo } }
       });
 
-
-      if (latestOrder) {
-        const ordersToDelete = await this.orderModel.findAll({
-          where: {
-            order_status: '0', // Status 0 (belum selesai)
-            createdAt: { [Op.lt]: fifteenMinutesAgo }, // Dibuat lebih dari 15 menit yang lalu
-            order_id: { [Op.lte]: latestOrder.order_id } // ID kurang dari atau sama dengan ID terakhir
-          }
-        });
-
-      if (ordersToDelete.length > '0') {
-        // Hapus pesanan yang memenuhi kondisi
+      if (ordersToDelete.length > 0) {
         for (const order of ordersToDelete) {
-          await order.destroy();
-          console.log(`Order with ID ${order.order_id} has been deleted.`);
+          const detailOrders = await this.detailOrderModel.findAll({
+            where: { order_id: order.order_id },
+            transaction
+          });
+
+          for (const detailOrder of detailOrders) {
+            const menuIngredients = await this.menuIngredientsModel.findAll({
+              where: { menu_id: detailOrder.menu_id },
+              transaction
+            });
+
+            for (const menuIngredient of menuIngredients) {
+              await this.foodIngredientsModel.increment('food_ingredients_stock', {
+                by: menuIngredient.menu_ingredients_qty * detailOrder.detail_order_qty,
+                where: { food_ingredients_id: menuIngredient.food_ingredients_id },
+                transaction
+              });
+
+              await this.detailFoodIngredientsModel.destroy({
+                where: {
+                  food_ingredients_id: menuIngredient.food_ingredients_id,
+                  detail_food_ingredients_qty: menuIngredient.menu_ingredients_qty * detailOrder.detail_order_qty,
+                  detail_food_ingredients_type: 'Out'
+                },
+                transaction
+              });
+            }
+
+            await detailOrder.destroy({ transaction });
+          }
+
+          await order.destroy({ transaction });
+          console.log(`Order with ID ${order.order_id} and its details have been deleted.`);
         }
-        // Simpan status operasi keberhasilan
+
+        await transaction.commit();
         this.lastScheduledDeleteStatus = { success: true, message: "Scheduled orders deleted successfully." };
       } else {
-        // Simpan status operasi gagal
+        await transaction.rollback();
         this.lastScheduledDeleteStatus = { success: false, message: "No orders found to delete." };
       }
-    }
-    
-    // Batalkan pekerjaan penjadwalan jika pesanan terakhir tidak ditemukan
-    if (!latestOrder) {
-        if (this.scheduledJob) {
-          cancelJob(this.scheduledJob);
-        }
-    }
-
     } catch (error) {
+      await transaction.rollback();
       console.error("Error deleting scheduled orders:", error);
-      // Simpan status operasi gagal
       this.lastScheduledDeleteStatus = { success: false, message: "Internal server error." };
     }
-  }
-
+  };
+  
   handleListOrder = async (req, res) => {
     const order = await this.orderModel.findAll()
 

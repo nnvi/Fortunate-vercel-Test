@@ -45,7 +45,7 @@ function apply(app) {
   const foodIngredientsController = new FoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   const detailFoodIngredientsController = new DetailFoodIngredientsController({ foodIngredientsModel, detailFoodIngredientsModel });
   const menuIngredientsController = new MenuIngredientsController({ menuModel, foodIngredientsModel, menuIngredientsModel });
-  const orderController = new OrderController({ userModel, orderModel });
+  const orderController = new OrderController({ userModel, orderModel, detailOrderModel, menuIngredientsModel, foodIngredientsModel, detailFoodIngredientsModel });
   const detailOrderController = new DetailOrderController({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel, detailFoodIngredientsModel });
   const cartController = new CartController({ menuModel });
 
