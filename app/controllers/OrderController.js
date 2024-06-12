@@ -93,48 +93,60 @@ class OrderController extends ApplicationController {
   handleDeleteScheduledOrder = async () => {
     const transaction = await this.orderModel.sequelize.transaction();
     try {
-      const fifteenMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
+      const fifteenMinutesAgo = new Date(Date.now() - 1 * 60 * 1000);
       const ordersToDelete = await this.orderModel.findAll({
         where: { order_status: '0', createdAt: { [Op.lt]: fifteenMinutesAgo } }
       });
-
+  
       if (ordersToDelete.length > 0) {
         for (const order of ordersToDelete) {
           const detailOrders = await this.detailOrderModel.findAll({
             where: { order_id: order.order_id },
             transaction
           });
-
+  
+          const processedIngredients = new Set();
+  
           for (const detailOrder of detailOrders) {
             const menuIngredients = await this.menuIngredientsModel.findAll({
               where: { menu_id: detailOrder.menu_id },
               transaction
             });
-
+  
             for (const menuIngredient of menuIngredients) {
-              await this.foodIngredientsModel.increment('food_ingredients_stock', {
-                by: menuIngredient.menu_ingredients_qty * detailOrder.detail_order_qty,
-                where: { food_ingredients_id: menuIngredient.food_ingredients_id },
-                transaction
-              });
-
-              await this.detailFoodIngredientsModel.destroy({
-                where: {
-                  food_ingredients_id: menuIngredient.food_ingredients_id,
-                  detail_food_ingredients_qty: menuIngredient.menu_ingredients_qty * detailOrder.detail_order_qty,
-                  detail_food_ingredients_type: 'Out'
-                },
-                transaction
-              });
+              const ingredientKey = `${menuIngredient.food_ingredients_id}-${detailOrder.detail_order_qty}`;
+  
+              if (!processedIngredients.has(ingredientKey)) {
+                const incrementQty = menuIngredient.menu_ingredients_qty * detailOrder.detail_order_qty;
+  
+                console.log(`Incrementing ${incrementQty} for ingredient ID ${menuIngredient.food_ingredients_id}`);
+  
+                await this.foodIngredientsModel.increment('food_ingredients_stock', {
+                  by: incrementQty,
+                  where: { food_ingredients_id: menuIngredient.food_ingredients_id },
+                  transaction
+                });
+  
+                await this.detailFoodIngredientsModel.destroy({
+                  where: {
+                    food_ingredients_id: menuIngredient.food_ingredients_id,
+                    detail_food_ingredients_qty: incrementQty,
+                    detail_food_ingredients_type: 'Out'
+                  },
+                  transaction
+                });
+  
+                processedIngredients.add(ingredientKey);
+              }
             }
-
+  
             await detailOrder.destroy({ transaction });
           }
-
+  
           await order.destroy({ transaction });
           console.log(`Order with ID ${order.order_id} and its details have been deleted.`);
         }
-
+  
         await transaction.commit();
         this.lastScheduledDeleteStatus = { success: true, message: "Scheduled orders deleted successfully." };
       } else {
@@ -146,7 +158,7 @@ class OrderController extends ApplicationController {
       console.error("Error deleting scheduled orders:", error);
       this.lastScheduledDeleteStatus = { success: false, message: "Internal server error." };
     }
-  };
+  };  
   
   handleListOrder = async (req, res) => {
     const order = await this.orderModel.findAll()
