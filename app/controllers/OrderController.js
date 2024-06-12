@@ -154,6 +154,55 @@ class OrderController extends ApplicationController {
     res.status(200).json(order)
   }
 
+  handleGetFilteredOrder = async (req, res) => {
+    try {
+      const { order_id, table_number, period } = req.query;
+      
+      let dateFilter = {};
+      const today = new Date();
+      switch (period) {
+        case 'Today':
+          dateFilter = { [Op.gte]: today.setHours(0, 0, 0, 0) };
+          break;
+        case 'Last 7 days':
+          dateFilter = { [Op.gte]: new Date(today - 7 * 24 * 60 * 60 * 1000) };
+          break;
+        case 'Last 30 days':
+          dateFilter = { [Op.gte]: new Date(today - 30 * 24 * 60 * 60 * 1000) };
+          break;
+        case 'Last 3 months':
+          dateFilter = { [Op.gte]: new Date(today - 3 * 30 * 24 * 60 * 60 * 1000) };
+          break;
+        default:
+          break;
+      }
+
+      let filter = {
+        where: {
+          createdAt: dateFilter
+        }
+      };
+
+      if (order_id) {
+        filter.where.order_id = order_id;
+      }
+
+      if (table_number) {
+        filter.where.table_number = table_number;
+      }
+
+      const orders = await this.orderModel.findAll(filter);
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(404).json({
+        error: {
+          name: error.name,
+          message: error.message
+        }
+      });
+    }
+  }
+
   getOrderFromRequest = async (req) => {
     return this.orderModel.findByPk(req.params.id);
   }
