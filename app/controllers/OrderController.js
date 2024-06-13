@@ -93,7 +93,7 @@ class OrderController extends ApplicationController {
   handleDeleteScheduledOrder = async () => {
     const transaction = await this.orderModel.sequelize.transaction();
     try {
-      const fifteenMinutesAgo = new Date(Date.now() - 1 * 60 * 1000);
+      const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
       const ordersToDelete = await this.orderModel.findAll({
         where: { order_status: '0', createdAt: { [Op.lt]: fifteenMinutesAgo } }
       });
