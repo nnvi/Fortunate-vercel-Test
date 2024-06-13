@@ -132,7 +132,7 @@ class DetailOrderController extends ApplicationController {
             model: this.orderModel
           },
           {
-            model: this.
+            model: this.menuModel
           }
         ]
       });
