@@ -1,13 +1,14 @@
 const ApplicationController = require('./ApplicationController');
 
 class DetailOrderController extends ApplicationController {
-  constructor({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel, detailFoodIngredientsModel }) {
+  constructor({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel, detailFoodIngredientsModel, menuModel }) {
     super();
     this.foodIngredientsModel = foodIngredientsModel;
     this.menuIngredientsModel = menuIngredientsModel;
     this.orderModel = orderModel;
     this.detailOrderModel = detailOrderModel;
     this.detailFoodIngredientsModel = detailFoodIngredientsModel;
+    this.menuModel = menuModel;
   }
 
   handleCreateDetailOrder = async (req, res) => {
@@ -128,7 +129,10 @@ class DetailOrderController extends ApplicationController {
         where: { order_id: order_id },
         include: [
           {
-            model: this.orderModel,
+            model: this.orderModel
+          },
+          {
+            model: this.
           }
         ]
       });
