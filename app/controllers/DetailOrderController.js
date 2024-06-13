@@ -134,30 +134,13 @@ class DetailOrderController extends ApplicationController {
       const detailOrders = await this.detailOrderModel.findAll({
         where: { order_id: order_id },
         include: [
-          { model: this.menuModel }
+          { model: this.menuModel },
+          { model: this.orderModel}
         ]
       });
+
   
-      // Check if detailOrders is found
-      if (!detailOrders || detailOrders.length === 0) {
-        return res.status(404).json({ error: { message: "Detail Orders not found for the given order ID." } });
-      }
-  
-      // Construct response
-      const modifiedDetailOrders = detailOrders.map(detailOrder => ({
-        detail_order_id: detailOrder.detail_order_id,
-        order_id: detailOrder.order_id,
-        menu_id: detailOrder.menu_id,
-        detail_order_qty: detailOrder.detail_order_qty,
-        detail_order_notes: detailOrder.detail_order_notes,
-        createdAt: detailOrder.createdAt,
-        updatedAt: detailOrder.updatedAt,
-        menus: detailOrder.menus.map(menu => ({
-          menu_name: menu.menu_name,
-        }))
-      }));
-  
-      res.status(200).json(modifiedDetailOrders)
+      res.status(200).json(detailOrders)
     } catch (error) {
       res.status(422).json({
         error: {
