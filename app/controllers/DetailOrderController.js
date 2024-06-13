@@ -128,12 +128,7 @@ class DetailOrderController extends ApplicationController {
         where: { order_id: order_id },
         include: [
           {
-            model: this.menuIngredientsModel,
-            include: [
-              {
-                model: this.foodIngredientsModel
-              }
-            ]
+            model: this.orderModel,
           }
         ]
       });
