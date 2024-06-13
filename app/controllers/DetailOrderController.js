@@ -1,13 +1,14 @@
 const ApplicationController = require('./ApplicationController');
 
 class DetailOrderController extends ApplicationController {
-  constructor({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel, detailFoodIngredientsModel }) {
+  constructor({ foodIngredientsModel, menuIngredientsModel, orderModel, detailOrderModel, detailFoodIngredientsModel, menuModel }) {
     super();
     this.foodIngredientsModel = foodIngredientsModel;
     this.menuIngredientsModel = menuIngredientsModel;
     this.orderModel = orderModel;
     this.detailOrderModel = detailOrderModel;
     this.detailFoodIngredientsModel = detailFoodIngredientsModel;
+    this.menuModel = menuModel;
   }
 
   handleCreateDetailOrder = async (req, res) => {
@@ -74,14 +75,6 @@ class DetailOrderController extends ApplicationController {
             transaction
           });
 
-          // Create detail order entry
-          await this.detailOrderModel.create({
-            order_id: order_id,
-            menu_id: menu_id,
-            detail_order_qty: detail_order_qty,
-            detail_order_notes: detail_order_notes
-          }, { transaction });
-
           // Create detail food ingredients entry with type "Out"
           await this.detailFoodIngredientsModel.create({
             food_ingredients_id: foodIngredient.food_ingredients_id,
@@ -90,6 +83,14 @@ class DetailOrderController extends ApplicationController {
           }, { transaction });
           }
         }
+
+          // Create detail order entry
+          await this.detailOrderModel.create({
+            order_id: order_id,
+            menu_id: menu_id,
+            detail_order_qty: detail_order_qty,
+            detail_order_notes: detail_order_notes
+          }, { transaction });
       }
 
       await transaction.commit();
@@ -112,8 +113,27 @@ class DetailOrderController extends ApplicationController {
   }
 
   handleListDetailOrder = async (req, res) => {
-    const detailOrder = await this.detailOrderModel.findAll()
-    res.status(200).json(detailOrder)
+    const detailOrders = await this.detailOrderModel.findAll({
+      include: [
+        { model: this.menuModel }
+      ]
+    });
+
+    // Modifikasi respons untuk menyertakan hanya menu_name yang sesuai dengan menu_id
+    const modifiedDetailOrders = detailOrders.map(detailOrder => ({
+      detail_order_id: detailOrder.detail_order_id,
+      order_id: detailOrder.order_id,
+      menu_id: detailOrder.menu_id,
+      detail_order_qty: detailOrder.detail_order_qty,
+      detail_order_notes: detailOrder.detail_order_notes,
+      createdAt: detailOrder.createdAt,
+      updatedAt: detailOrder.updatedAt,
+      menus: detailOrder.menus.map(menu => ({
+        menu_name: menu.menu_name,
+      }))
+    }));
+
+    res.status(200).json(modifiedDetailOrders)
   }
 
   getDetailOrderFromRequest(req) {
@@ -124,16 +144,33 @@ class DetailOrderController extends ApplicationController {
     try {
       const { order_id } = req.params;
   
-      const detailOrder = await this.detailOrderModel.findAll({
+      const detailOrders = await this.detailOrderModel.findAll({
         where: { order_id: order_id },
         include: [
-          {
-            model: this.orderModel
-          }
+          { model: this.menuModel }
         ]
       });
   
-      res.status(200).json(detailOrder);
+      // Check if detailOrders is found
+      if (!detailOrders || detailOrders.length === 0) {
+        return res.status(404).json({ error: { message: "Detail Orders not found for the given order ID." } });
+      }
+  
+      // Construct response
+      const modifiedDetailOrders = detailOrders.map(detailOrder => ({
+        detail_order_id: detailOrder.detail_order_id,
+        order_id: detailOrder.order_id,
+        menu_id: detailOrder.menu_id,
+        detail_order_qty: detailOrder.detail_order_qty,
+        detail_order_notes: detailOrder.detail_order_notes,
+        createdAt: detailOrder.createdAt,
+        updatedAt: detailOrder.updatedAt,
+        menus: detailOrder.menus.map(menu => ({
+          menu_name: menu.menu_name,
+        }))
+      }));
+  
+      res.status(200).json(modifiedDetailOrders)
     } catch (error) {
       res.status(422).json({
         error: {
