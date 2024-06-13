@@ -115,25 +115,12 @@ class DetailOrderController extends ApplicationController {
   handleListDetailOrder = async (req, res) => {
     const detailOrders = await this.detailOrderModel.findAll({
       include: [
-        { model: this.menuModel }
+        { model: this.menuModel },
+        { model: this.orderModel}
       ]
     });
 
-    // Modifikasi respons untuk menyertakan hanya menu_name yang sesuai dengan menu_id
-    const modifiedDetailOrders = detailOrders.map(detailOrder => ({
-      detail_order_id: detailOrder.detail_order_id,
-      order_id: detailOrder.order_id,
-      menu_id: detailOrder.menu_id,
-      detail_order_qty: detailOrder.detail_order_qty,
-      detail_order_notes: detailOrder.detail_order_notes,
-      createdAt: detailOrder.createdAt,
-      updatedAt: detailOrder.updatedAt,
-      menus: detailOrder.menus.map(menu => ({
-        menu_name: menu.menu_name,
-      }))
-    }));
-
-    res.status(200).json(modifiedDetailOrders)
+    res.status(200).json(detailOrders)
   }
 
   getDetailOrderFromRequest(req) {
