@@ -113,15 +113,47 @@ class DetailOrderController extends ApplicationController {
   }
 
   handleListDetailOrder = async (req, res) => {
-    const detailOrders = await this.detailOrderModel.findAll({
-      include: [
-        { model: this.menuModel },
-        { model: this.orderModel}
-      ]
-    });
-
-    res.status(200).json(detailOrders)
-  }
+    try {
+      const detailOrders = await this.detailOrderModel.findAll({
+        include: [{ model: this.orderModel }]
+      });
+  
+      if (!detailOrders.length) {
+        return res.status(404).json({ message: "No detail orders found." });
+      }
+  
+      // Get unique menu_ids from detailOrders
+      const menuIds = [...new Set(detailOrders.map(detail => detail.menu_id))];
+  
+      // Get menu data for those menu_ids
+      const menus = await this.menuModel.findAll({
+        where: { menu_id: menuIds }
+      });
+  
+      // Create a map of menu_id to menu_name
+      const menuMap = {};
+      menus.forEach(menu => {
+        menuMap[menu.menu_id] = menu.menu_name;
+      });
+  
+      // Add menu_name to each detail order
+      const detailOrdersWithMenuNames = detailOrders.map(detail => {
+        return {
+          ...detail.dataValues,
+          menu_name: menuMap[detail.menu_id] || null
+        };
+      });
+  
+      res.status(200).json(detailOrdersWithMenuNames);
+    } catch (error) {
+      res.status(422).json({
+        error: {
+          name: error.name,
+          message: error.message
+        }
+      });
+    }
+  }  
 
   getDetailOrderFromRequest(req) {
     return this.detailOrderModel.findByPk(req.params.id);
@@ -133,14 +165,36 @@ class DetailOrderController extends ApplicationController {
   
       const detailOrders = await this.detailOrderModel.findAll({
         where: { order_id: order_id },
-        include: [
-          { model: this.menuModel },
-          { model: this.orderModel}
-        ]
+        include: [{ model: this.orderModel }]
       });
-
   
-      res.status(200).json(detailOrders)
+      if (!detailOrders.length) {
+        return res.status(404).json({ message: "No detail orders found for the given order ID." });
+      }
+  
+      // Get unique menu_ids from detailOrders
+      const menuIds = [...new Set(detailOrders.map(detail => detail.menu_id))];
+  
+      // Get menu data for those menu_ids
+      const menus = await this.menuModel.findAll({
+        where: { menu_id: menuIds }
+      });
+  
+      // Create a map of menu_id to menu_name
+      const menuMap = {};
+      menus.forEach(menu => {
+        menuMap[menu.menu_id] = menu.menu_name;
+      });
+  
+      // Add menu_name to each detail order
+      const detailOrdersWithMenuNames = detailOrders.map(detail => {
+        return {
+          ...detail.dataValues,
+          menu_name: menuMap[detail.menu_id] || null
+        };
+      });
+  
+      res.status(200).json(detailOrdersWithMenuNames);
     } catch (error) {
       res.status(422).json({
         error: {
@@ -150,6 +204,7 @@ class DetailOrderController extends ApplicationController {
       });
     }
   }
+  
 }
 
 module.exports = DetailOrderController;
