@@ -50,24 +50,22 @@ class CategoryController extends ApplicationController {
 
   handleUpdateCategory = async (req, res) => {
     try {
-      const {
-        category_name,
-        category_image
-      } = req.body;
-
+      const { category_name, category_image } = req.body;
       const category = await this.getCategoryFromRequest(req);
 
-      if(req.file) {
+      if (req.file) {
         const imageName = req.file.originalname;
         const img = await imagekit.upload({
           file: req.file.buffer,
           fileName: imageName,
           folder: "/Fortunate_Coffee/Category"
         });
+
         await category.update({
           category_name,
           category_image: img.url,
         });
+
         res.status(200).json({
           status: 'success',
           message: 'Category updated successfully',
@@ -75,11 +73,35 @@ class CategoryController extends ApplicationController {
             category_name,
             category_image: img.url,
           }
-        })
-      } else {
+        });
+      } else if (category_image.startsWith('http')) {
+        // Handling case where category_image is a URL
         await category.update({
           category_name,
           category_image,
+        });
+
+        res.status(200).json({
+          status: 'success',
+          message: 'Category updated successfully',
+          data: {
+            category_name,
+            category_image,
+          }
+        });
+      } else {
+        // Handling case where category_image is not a URL nor a file upload
+        await category.update({
+          category_name,
+        });
+
+        res.status(200).json({
+          status: 'success',
+          message: 'Category updated successfully',
+          data: {
+            category_name,
+            category_image: category.category_image, // Assuming you want to return existing image if no update
+          }
         });
       }
     } catch (err) {

@@ -87,7 +87,7 @@ class MenuController extends ApplicationController {
 
       const menu = await this.getMenuFromRequest(req);
 
-      if(req.file) {
+      if (req.file) {
         const imageName = req.file.originalname;
         const img = await imagekit.upload({
           file: req.file.buffer,
@@ -111,14 +111,47 @@ class MenuController extends ApplicationController {
             menu_image: img.url,
             menu_desc
           }
-        })
-      } else {
+        });
+      } else if (menu_image.startsWith('http')) {
+        // Handling case where menu_image is a URL
         await menu.update({
           category_id,
           menu_name,
           menu_price,
           menu_image,
           menu_desc
+        });
+
+        return res.status(200).json({
+          status: 'success',
+          message: 'Menu updated successfully',
+          data: {
+            category_id,
+            menu_name,
+            menu_price,
+            menu_image,
+            menu_desc
+          }
+        });
+      } else {
+        // Handling case where menu_image is neither a URL nor a file upload
+        await menu.update({
+          category_id,
+          menu_name,
+          menu_price,
+          menu_desc
+        });
+
+        return res.status(200).json({
+          status: 'success',
+          message: 'Menu updated successfully',
+          data: {
+            category_id,
+            menu_name,
+            menu_price,
+            menu_image: menu.menu_image, // Assuming you want to return existing image if no update
+            menu_desc
+          }
         });
       }
     } catch (err) {
