@@ -17,7 +17,7 @@ module.exports = {
           key: 'food_ingredients_id' // Kolom target yang menjadi primary key
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
+        onDelete: 'CASCADE'
       },
       detail_food_ingredients_qty: {
         allowNull: false,

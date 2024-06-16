@@ -66,43 +66,62 @@ class MenuIngredientsController extends ApplicationController {
       const { ingredients } = req.body;
       const menu_id = req.params.menu_id;
 
+      // Pastikan menuId ada
+      const menu = await this.menuModel.findByPk(menu_id);
+      if (!menu) {
+        return res.status(404).json({ error: { message: "Menu not found." } });
+      }
+
       // Simpan semua food ingredients yang sudah ditemukan dalam data baru
-      const newFoodIngredients = new Set(ingredients.map(item => item.food_ingredients_id));
-  
-      // Simpan semua food ingredients yang sudah ditemukan
-    const existingMenuIngredients = new Set();
-  
+      const newFoodIngredients = new Set();
+      for (const item of ingredients) {
+        if (newFoodIngredients.has(item.food_ingredients_id)) {
+          return res.status(422).json({ error: { message: "Duplicate food ingredient found in the list." } });
+        }
+        newFoodIngredients.add(item.food_ingredients_id);
+      }
+
+      // Ambil semua menu ingredients yang terkait dengan menuId dari database
+      const existingMenuIngredients = await this.menuIngredientsModel.findAll({
+        where: { menu_id: menu_id }
+      });
+
       // Simpan semua menu ingredients yang telah diperbarui
       const updatedMenuIngredients = [];
-  
+
       // Lakukan iterasi pada menu ingredients yang ada di database
       for (const menuIngredient of existingMenuIngredients) {
-        // Periksa apakah food ingredient masih ada dalam data baru
-        if (!newFoodIngredients.has(menuIngredient.food_ingredients_id)) {
-          // Jika tidak ada, hapus menu ingredient dari database
-          await menuIngredient.destroy();
-        } else {
-          // Jika masih ada, cari item yang sesuai dalam data baru dan lakukan pembaruan
-          const matchingItem = ingredients.find(item => item.food_ingredients_id === menuIngredient.food_ingredients_id);
+        const matchingItem = ingredients.find(item => item.food_ingredients_id === menuIngredient.food_ingredients_id);
+        if (matchingItem) {
+          // Update existing ingredient
           await menuIngredient.update({
             menu_ingredients_qty: matchingItem.menu_ingredients_qty
           });
           updatedMenuIngredients.push(menuIngredient);
+          newFoodIngredients.delete(menuIngredient.food_ingredients_id);
+        } else {
+          // Delete ingredient not in the new list
+          await menuIngredient.destroy();
         }
       }
-  
-      // Tambahkan menu ingredients baru jika ada
-      for (const item of ingredients) {
-        if (!existingMenuIngredients.some(menuIngredient => menuIngredient.food_ingredients_id === item.food_ingredients_id)) {
+
+      // Add new ingredients
+      for (const { food_ingredients_id, menu_ingredients_qty } of ingredients) {
+        if (!existingMenuIngredients.some(menuIngredient => menuIngredient.food_ingredients_id === food_ingredients_id)) {
+          const foodIngredient = await this.foodIngredientsModel.findByPk(food_ingredients_id);
+          if (!foodIngredient) {
+            return res.status(404).json({ error: { message: `Food ingredients ${food_ingredients_id} not found.` } });
+          }
+
           const menuIngredient = await this.menuIngredientsModel.create({
-            menu_id: menu_id,
-            food_ingredients_id: item.food_ingredients_id,
-            menu_ingredients_qty: item.menu_ingredients_qty
+            menu_id,
+            food_ingredients_id,
+            menu_ingredients_qty
           });
           updatedMenuIngredients.push(menuIngredient);
         }
       }
-  
+
       res.status(200).json(updatedMenuIngredients);
     } catch (error) {
       res.status(422).json({
