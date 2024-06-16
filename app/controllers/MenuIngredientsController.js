@@ -69,10 +69,8 @@ class MenuIngredientsController extends ApplicationController {
       // Simpan semua food ingredients yang sudah ditemukan dalam data baru
       const newFoodIngredients = new Set(ingredients.map(item => item.food_ingredients_id));
   
-      // Ambil semua menu ingredients yang terkait dengan menuId dari database
-      const existingMenuIngredients = await this.menuIngredientsModel.findAll({
-        where: { menu_id: menu_id }
-      });
+      // Simpan semua food ingredients yang sudah ditemukan
+    const existingMenuIngredients = new Set();
   
       // Simpan semua menu ingredients yang telah diperbarui
       const updatedMenuIngredients = [];
