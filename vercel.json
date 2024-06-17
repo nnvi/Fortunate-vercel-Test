@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "/bin/www",
+      "src": "/app/index.js",
       "use": "@vercel/node"
     }
   ],
@@ -10,8 +10,8 @@
   "installCommand": "yarn add -g pg",
   "routes": [
     {
-      "src": "/bin/(.*)",
-      "dest": "/bin/www"
+      "src": "/app/index.js",
+      "dest": "index.js"
     }
   ]
 }
