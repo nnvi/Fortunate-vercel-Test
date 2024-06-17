@@ -10,8 +10,8 @@
   "installCommand": "yarn add -g pg",
   "routes": [
     {
-      "src": "/app/index.js",
-      "dest": "/app/index.js"
+      "src": "/app/(.*)",
+      "dest": "index.js"
     }
   ]
 }
