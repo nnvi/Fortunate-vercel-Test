@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "/bin/www.js",
+      "src": "/bin/www",
       "use": "@vercel/node"
     }
   ],
@@ -11,7 +11,7 @@
   "routes": [
     {
       "src": "/bin/(.*)",
-      "dest": "www.js"
+      "dest": "/bin/www"
     }
   ]
 }
