@@ -13,14 +13,15 @@ const {
   // RPGPASSWORD = "HhYtTjHIxVqDQsGbLAwmkLJXQDnTKdDA",
   // RPGDATABASE = "railway",
 
-  POSTGRES_URL="postgres://default:TIdk9BSof5Mu@ep-wild-base-a1x1pls8-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require",
-  POSTGRES_PRISMA_URL="postgres://default:TIdk9BSof5Mu@ep-wild-base-a1x1pls8-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15",
-  POSTGRES_URL_NO_SSL="postgres://default:TIdk9BSof5Mu@ep-wild-base-a1x1pls8-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb",
-  POSTGRES_URL_NON_POOLING="postgres://default:TIdk9BSof5Mu@ep-wild-base-a1x1pls8.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require",
+  POSTGRES_URL="postgres://default:tGj1U4ACmfLN@ep-restless-violet-a19ps313-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require",
+  POSTGRES_PRISMA_URL="postgres://default:tGj1U4ACmfLN@ep-restless-violet-a19ps313-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15",
+  POSTGRES_URL_NO_SSL="postgres://default:tGj1U4ACmfLN@ep-restless-violet-a19ps313-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb",
+  POSTGRES_URL_NON_POOLING="postgres://default:tGj1U4ACmfLN@ep-restless-violet-a19ps313.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require",
   POSTGRES_USER="default",
-  POSTGRES_HOST="ep-wild-base-a1x1pls8-pooler.ap-southeast-1.aws.neon.tech",
-  POSTGRES_PASSWORD="TIdk9BSof5Mu",
+  POSTGRES_HOST="ep-restless-violet-a19ps313-pooler.ap-southeast-1.aws.neon.tech",
+  POSTGRES_PASSWORD="tGj1U4ACmfLN",
   POSTGRES_DATABASE="verceldb",
+
 } = process.env;
 
 module.exports = {
